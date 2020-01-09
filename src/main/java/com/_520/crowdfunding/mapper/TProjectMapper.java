@@ -1,0 +1,31 @@
+package com._520.crowdfunding.mapper;
+
+import com._520.crowdfunding.domain.TProject;
+import com._520.crowdfunding.domain.TProjectExample;
+import com._520.crowdfunding.domain.TProjectKey;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+
+public interface TProjectMapper {
+    long countByExample(TProjectExample example);
+
+    int deleteByExample(TProjectExample example);
+
+    int deleteByPrimaryKey(TProjectKey key);
+
+    int insert(TProject record);
+
+    int insertSelective(TProject record);
+
+    List<TProject> selectByExample(TProjectExample example);
+
+    TProject selectByPrimaryKey(TProjectKey key);
+
+    int updateByExampleSelective(@Param("record") TProject record, @Param("example") TProjectExample example);
+
+    int updateByExample(@Param("record") TProject record, @Param("example") TProjectExample example);
+
+    int updateByPrimaryKeySelective(TProject record);
+
+    int updateByPrimaryKey(TProject record);
+}

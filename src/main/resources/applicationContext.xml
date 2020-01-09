@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        https://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <context:annotation-config/>
+    <!-- IoC注解解析器 -->
+    <context:component-scan base-package="com._520.crowdfunding">
+        <!-- 不扫描controller类 -->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--    TX注解解析器   -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+    <!-- 整合mybatis和spring-->
+    <!-- 连接池 -->
+    <context:property-placeholder location="classpath:db.properties" system-properties-mode="NEVER"/>
+    <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 配置工厂 -->
+    <bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="druidDataSource"/>
+        <!-- 配置别名扫描 -->
+        <property name="typeAliasesPackage" value="com._520.crowdfunding.domain"/>
+        <!-- 加载Mapper文件 -->
+        <property name="mapperLocations" value="classpath:/mappers/*Mapper.xml"/>
+
+    </bean>
+
+    <!-- Mapper接口扫描，扫描的是接口所在的包 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com._520.crowdfunding.mapper"/>
+    </bean>
+
+    <!-- 事务管理器 -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="druidDataSource"/>
+    </bean>
+
+     <!--<tx:advice id="txAdvice" transaction-manager="txManager">
+         <tx:attributes>
+             <tx:method name="trans"/>
+         </tx:attributes>
+     </tx:advice>-->
+
+    <!--&lt;!&ndash; 配置事务增强 &ndash;&gt;
+    <tx:advice transaction-manager="txManager" id="txAdvice">
+        &lt;!&ndash; 事务属性 &ndash;&gt;
+        <tx:attributes>
+            &lt;!&ndash; 所有 方法都是事务 &ndash;&gt;
+            <tx:method name="*" />
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="list*" read-only="true" />
+
+            &lt;!&ndash;增删改 &ndash;&gt;
+            <tx:method name="insert*" timeout="5000" rollback-for="java.lang.Exception"/>
+            <tx:method name="add*" timeout="5000" />
+            <tx:method name="update*" timeout="5000" />
+            <tx:method name="delete*" timeout="5000" />
+        </tx:attributes>
+    </tx:advice>
+     &lt;!&ndash; 配置事务切面 &ndash;&gt;
+     <aop:config>
+         <aop:pointcut id="txPoint" expression="execution(* com._520.crowdfunding.service.*Service.*(..))"/>
+         &lt;!&ndash; 管理事务增强 &ndash;&gt;
+         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
+     </aop:config>
+-->
+     <!--&lt;!&ndash;    crud通用事务配置      &ndash;&gt;
+     <tx:advice id="crudAdvice" transaction-manager="txManager">
+         <tx:attributes>
+             &lt;!&ndash;    查询      &ndash;&gt;
+             <tx:method name="list*" read-only="true" propagation="REQUIRED"/>
+             <tx:method name="get*" read-only="true" propagation="REQUIRED"/>
+             <tx:method name="query*" read-only="true" propagation="REQUIRED"/>
+             &lt;!&ndash;    其他方法    &ndash;&gt;
+             <tx:method name="*" propagation="REQUIRED"/>
+         </tx:attributes>
+     </tx:advice>-->
+</beans>
