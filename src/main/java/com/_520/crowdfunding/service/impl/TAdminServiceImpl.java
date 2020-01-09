@@ -2,6 +2,7 @@ package com._520.crowdfunding.service.impl;
 
 import com._520.crowdfunding.common.exception.LoginException;
 import com._520.crowdfunding.common.util.Const;
+import com._520.crowdfunding.common.util.MD5Util;
 import com._520.crowdfunding.domain.TAdmin;
 import com._520.crowdfunding.domain.TAdminExample;
 import com._520.crowdfunding.mapper.TAdminMapper;
@@ -38,8 +39,8 @@ public class TAdminServiceImpl implements TAdminService {
         // 找到用户
         TAdmin admin = admins.get(0);
 
-        // 判断密码是否正确
-        if (!admin.getUserpswd().equals(password)){
+        // 判断密码是否正确，将用户输入的密码加密后和数据库中的对比
+        if (!admin.getUserpswd().equals(MD5Util.digest(password))){
             throw new LoginException(Const.LOGIN_USERPSWD_ERROR);
         }
         return admin;
