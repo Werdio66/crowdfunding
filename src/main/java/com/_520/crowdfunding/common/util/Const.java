@@ -13,4 +13,5 @@ public class Const {
 	public static final String LOGIN_USERPSWD_ERROR = "用户密码不正确!";
 	public static final String DEFAULT_USERPSWD = "123";
 
+	public static final String ERROR_MSG = "errorMsg";
 }

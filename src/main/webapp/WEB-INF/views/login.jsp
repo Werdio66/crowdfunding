@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -28,20 +29,21 @@
 
     <form id="loginForm" class="form-signin" role="form" action="/doLogin" method="post">
         <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i> 用户登录</h2>
+        <c:if test="${errorMsg != null}">
+            <div class="form-group has-success has-feedback" style="color: red">
+                ${errorMsg}
+            </div>
+        </c:if>
+
         <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control" id="username" name="username" placeholder="请输入登录账号" autofocus>
+            <input type="text" class="form-control" id="username" name="username" value="${param.username}" placeholder="请输入登录账号" autofocus>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control" id="password" name="password" placeholder="请输入登录密码" style="margin-top:10px;">
+            <input type="password" class="form-control" id="password" name="password" placeholder="请输入登录密码" style="margin-top:10px;">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
-        <div class="form-group has-success has-feedback">
-            <select class="form-control" >
-                <option value="member">会员</option>
-                <option value="user">管理</option>
-            </select>
-        </div>
+
         <div class="checkbox">
             <label>
                 <input type="checkbox" value="remember-me"> 记住我
