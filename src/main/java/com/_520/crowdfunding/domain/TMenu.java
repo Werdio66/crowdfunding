@@ -1,5 +1,8 @@
 package com._520.crowdfunding.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TMenu extends TMenuKey {
     private Integer pid;
 
@@ -8,6 +11,27 @@ public class TMenu extends TMenuKey {
     private String icon;
 
     private String url;
+
+    private List<TMenu> child = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "TMenu{" +
+                "pid=" + pid +
+                ", name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
+                ", url='" + url + '\'' +
+                ", child=" + child +
+                '}';
+    }
+
+    public List<TMenu> getChild() {
+        return child;
+    }
+
+    public void setChild(List<TMenu> child) {
+        this.child = child;
+    }
 
     public Integer getPid() {
         return pid;
