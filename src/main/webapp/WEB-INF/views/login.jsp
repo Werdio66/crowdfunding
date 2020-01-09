@@ -9,8 +9,8 @@
     <meta name="description" content="">
     <meta name="keys" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" href="${PATH}/static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="${PATH}/static/css/font-awesome.min.css">
+    <%-- 静态包含css页面 --%>
+    <%@include file="common/css.jsp"%>
     <link rel="stylesheet" href="${PATH}/static/css/login.css">
     <style>
 
@@ -59,8 +59,8 @@
         <a class="btn btn-lg btn-success btn-block" onclick="dologin()" > 登录</a>
     </form>
 </div>
-<script src="${PATH}/static/jquery/jquery-2.1.1.min.js"></script>
-<script src="${PATH}/static/bootstrap/js/bootstrap.min.js"></script>
+<%-- 动态包含 --%>
+<jsp:include page="common/js.jsp"/>
 <script>
     function dologin() {
         // 提交表单
