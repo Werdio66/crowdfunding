@@ -34,6 +34,19 @@
 
     <!-- 配置工厂 -->
     <bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 注意其他配置，配置分页查询的拦截器 -->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!--使用下面的方式配置参数，一行配置一个 -->
+                        <value>
+                            helperDialect=mysql
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
         <property name="dataSource" ref="druidDataSource"/>
         <!-- 配置别名扫描 -->
         <property name="typeAliasesPackage" value="com._520.crowdfunding.domain"/>

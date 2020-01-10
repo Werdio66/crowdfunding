@@ -35,12 +35,12 @@
             </div>
         </c:if>
 
-        <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control" id="username" name="username" value="${param.username}" placeholder="请输入登录账号" autofocus>
+        <div class="form-group has-success has-feedback"><%-- 密码错误后账号回写 ${param.username} --%>
+            <input type="text" class="form-control" id="username" name="username" value="zhangsan" placeholder="请输入登录账号" autofocus>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">
-            <input type="password" class="form-control" id="password" name="password" placeholder="请输入登录密码" style="margin-top:10px;">
+            <input type="password" class="form-control" id="password" name="password" value="123456" placeholder="请输入登录密码" style="margin-top:10px;">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
 

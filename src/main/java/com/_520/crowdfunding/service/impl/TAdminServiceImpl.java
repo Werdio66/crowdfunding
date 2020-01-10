@@ -7,6 +7,8 @@ import com._520.crowdfunding.domain.TAdmin;
 import com._520.crowdfunding.domain.TAdminExample;
 import com._520.crowdfunding.mapper.TAdminMapper;
 import com._520.crowdfunding.service.TAdminService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -44,5 +46,14 @@ public class TAdminServiceImpl implements TAdminService {
             throw new LoginException(Const.LOGIN_USERPSWD_ERROR);
         }
         return admin;
+    }
+
+    @Override
+    public PageInfo<TAdmin> listAdminPage(Map<String, Object> map) {
+
+        List<TAdmin> tAdmins = adminMapper.selectByExample(null);
+        // 将查询的所有用户信息存到PageInfo中
+
+        return new PageInfo<>(tAdmins, 5);
     }
 }
