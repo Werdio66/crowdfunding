@@ -11,7 +11,7 @@
                 </c:if>
                 <c:if test="${not empty parent.child}">
                     <li class="list-group-item tree-closed">
-                        <span><i class="${parent.icon}"></i> ${parent.name} <span class="badge" style="float:right">3</span></span>
+                        <span><i class="${parent.icon}"></i> ${parent.name} <span class="badge" style="float:right">${parent.child.size()}</span></span>
                         <ul style="margin-top:10px;display:none;">
                             <c:forEach items="${parent.child}" var="child">
                                 <li style="height:30px;">
