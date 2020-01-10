@@ -75,18 +75,22 @@ public class TAdminController {
      * 处理登录后主页面的显示
      * @param pageNum       当前页
      * @param pageSize      每页的数量
+     * @param condition     查询条件
      * @return              跳转
      */
     @RequestMapping("/index")
     public String index(@RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                         @RequestParam(value = "pageSize", required = false, defaultValue = "2") Integer pageSize,
-                        Model model){
+                        Model model,
+                        @RequestParam(value = "condition", required = false, defaultValue = "")String condition){
         logger.debug("跳转到后台主界面 ");
         logger.info("pageNum = {}", pageNum);
         logger.info("pageSize = {}", pageSize);
+        logger.info("condition = {}", condition);
 
-        // 封装高级查询条件
+        // 封装模糊查询条件
         Map<String, Object> map = new HashMap<>();
+        map.put("condition", condition);
         // 设置页码和每页的数量，线程绑定
         PageHelper.startPage(pageNum, pageSize);
         // 调用业务层查询分页数据

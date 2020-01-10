@@ -34,15 +34,17 @@
                     <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i> 数据列表</h3>
                 </div>
                 <div class="panel-body">
-                    <form class="form-inline" role="form" style="float:left;">
+
+                    <form id="queryForm" class="form-inline" role="form" style="float:left;" action="${PATH}/admin/index" method="post">
                         <div class="form-group has-feedback">
                             <div class="input-group">
                                 <div class="input-group-addon">查询条件</div>
-                                <input class="form-control has-success" type="text" placeholder="请输入查询条件">
+                                <input class="form-control has-success" type="text" name="condition" value="${param.condition}" placeholder="请输入查询条件">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询</button>
+                        <button type="button" class="btn btn-warning" onclick="doQuery()"><i class="glyphicon glyphicon-search"></i> 查询</button>
                     </form>
+
                     <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
                     <button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='${PATH}/admin/toAdd'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
                     <br>
@@ -84,15 +86,15 @@
                                             <li class="disabled"><a href="#">上一页</a></li>
                                         </c:if>
                                         <c:if test="${!adminPage.isFirstPage}">
-                                            <li><a href="${PATH}/admin/index?pageNum=${adminPage.prePage}">上一页</a></li>
+                                            <li><a href="${PATH}/admin/index?condition=${param.condition}&pageNum=${adminPage.prePage}">上一页</a></li>
                                         </c:if>
 
                                         <c:forEach items="${adminPage.navigatepageNums}" var="num">
                                             <c:if test="${adminPage.pageNum == num}">
-                                                <li class="active"><a href="${PATH}/admin/index?pageNum=${num}">${num}<span class="sr-only">(current)</span></a></li>
+                                                <li class="active"><a href="${PATH}/admin/index?condition=${param.condition}&pageNum=${num}">${num}<span class="sr-only">(current)</span></a></li>
                                             </c:if>
                                             <c:if test="${adminPage.pageNum != num}">
-                                                 <li><a href="${PATH}/admin/index?pageNum=${num}">${num}</a></li>
+                                                 <li><a href="${PATH}/admin/index?condition=${param.condition}&pageNum=${num}">${num} </a></li>
                                             </c:if>
                                         </c:forEach>
 
@@ -101,7 +103,7 @@
                                             <li class="disabled"><a href="#">下一页</a></li>
                                         </c:if>
                                         <c:if test="${!adminPage.isLastPage}">
-                                            <li><a href="${PATH}/admin/index?pageNum=${adminPage.nextPage}">下一页</a></li>
+                                            <li><a href="${PATH}/admin/index?condition=${param.condition}&pageNum=${adminPage.nextPage}">下一页</a></li>
                                         </c:if>
 
                                     </ul>
@@ -120,6 +122,11 @@
 <%-- 动态包含 --%>
 <jsp:include page="/WEB-INF/views/common/js.jsp"/>
 <script type="text/javascript">
+
+    // 提交模糊查询表单
+    function doQuery(){
+        $('#queryForm').submit();
+    }
 
     // 处理删除
     $(".deleteAdmin").click(function () {

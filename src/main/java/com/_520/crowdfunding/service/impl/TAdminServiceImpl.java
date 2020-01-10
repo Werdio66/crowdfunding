@@ -51,10 +51,18 @@ public class TAdminServiceImpl implements TAdminService {
 
     @Override
     public PageInfo<TAdmin> listAdminPage(Map<String, Object> map) {
-
-        List<TAdmin> tAdmins = adminMapper.selectByExample(null);
+        String condition = (String) map.get("condition");
+        TAdminExample example = new TAdminExample();
+        // 如果有条件就进行模糊查询
+        if (!"".equals(condition)){
+            example.createCriteria().andLoginacctLike("%" + condition + "%");
+            TAdminExample example1 = new TAdminExample();
+            TAdminExample example2 = new TAdminExample();
+            example.or(example1.createCriteria().andEmailLike("%" + condition + "%"));
+            example.or(example2.createCriteria().andUsernameLike("%" + condition + "%"));
+        }
+        List<TAdmin> tAdmins = adminMapper.selectByExample(example);
         // 将查询的所有用户信息存到PageInfo中
-
         return new PageInfo<>(tAdmins, 5);
     }
 
