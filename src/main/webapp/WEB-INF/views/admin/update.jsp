@@ -34,8 +34,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading">表单数据<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
                 <div class="panel-body">
-                    <form id="updateForm" action="${PATH}/admin/doUpdate?id=${id}&pageNum=${pageNum}" method="post">
+                    <form id="updateForm" action="${PATH}/admin/doUpdate" method="post">
                         <div class="form-group">
+                            <input hidden name="id" value="${admin.id}">
+                            <input hidden name="pageNum" value="${param.pageNum}">
                             <label for="loginacct">登陆账号</label>
                             <input type="text" class="form-control" id="loginacct" name="loginacct" value="${admin.loginacct}" placeholder="请输入登陆账号">
                         </div>

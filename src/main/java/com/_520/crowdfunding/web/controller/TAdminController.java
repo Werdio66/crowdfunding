@@ -35,13 +35,11 @@ public class TAdminController {
     }
     // 跳转到修改页面
     @RequestMapping("/toUpdate")
-    public String toUpdate(Integer id, Integer pageNum, Model model){
+    public String toUpdate(Integer id, Model model){
         logger.info("修改用户的id = {}", id);
         // 调用业务层得到指定id的用户
         TAdmin admin = adminService.getTAdminById(id);
         model.addAttribute("admin", admin);
-        model.addAttribute("id", id);
-        model.addAttribute("pageNum", pageNum);
         logger.info("跳转到update界面..");
         return "admin/update";
     }
