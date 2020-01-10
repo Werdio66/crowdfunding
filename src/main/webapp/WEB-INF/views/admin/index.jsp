@@ -69,8 +69,8 @@
                                     <td>${admin.email}</td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>
-                                        <button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>
-                                        <button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>
+                                        <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='${PATH}/admin/toUpdate?id=${admin.id}&pageNum=${adminPage.pageNum}'"><i class="glyphicon glyphicon-pencil"></i></button>
+                                        <button type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-remove"></i></button>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -120,6 +120,9 @@
 <%-- 动态包含 --%>
 <jsp:include page="/WEB-INF/views/common/js.jsp"/>
 <script type="text/javascript">
+
+    $("")
+
     $(function () {
         $(".list-group-item").click(function(){
             if ( $(this).find("ul") ) {

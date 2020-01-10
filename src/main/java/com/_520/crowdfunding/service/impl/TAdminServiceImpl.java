@@ -6,9 +6,9 @@ import com._520.crowdfunding.common.util.Const;
 import com._520.crowdfunding.common.util.MD5Util;
 import com._520.crowdfunding.domain.TAdmin;
 import com._520.crowdfunding.domain.TAdminExample;
+import com._520.crowdfunding.domain.TAdminKey;
 import com._520.crowdfunding.mapper.TAdminMapper;
 import com._520.crowdfunding.service.TAdminService;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,5 +66,17 @@ public class TAdminServiceImpl implements TAdminService {
         admin.setCreatetime(AppDateUtils.getFormatTime());
         // 不完全添加
         adminMapper.insertSelective(admin);
+    }
+
+    @Override
+    public TAdmin getTAdminById(Integer id) {
+        TAdminKey key = new TAdminKey();
+        key.setId(id);
+        return adminMapper.selectByPrimaryKey(key);
+    }
+
+    @Override
+    public void updateTAdmin(TAdmin admin) {
+        adminMapper.updateByPrimaryKeySelective(admin);
     }
 }

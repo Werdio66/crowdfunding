@@ -14,6 +14,7 @@ public class TAdmin extends TAdminKey {
     @Override
     public String toString() {
         return "TAdmin{" +
+                "id='" + super.getId() + '\'' +
                 "loginacct='" + loginacct + '\'' +
                 ", userpswd='" + userpswd + '\'' +
                 ", username='" + username + '\'' +

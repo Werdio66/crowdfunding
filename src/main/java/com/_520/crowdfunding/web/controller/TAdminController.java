@@ -2,7 +2,6 @@ package com._520.crowdfunding.web.controller;
 
 import com._520.crowdfunding.domain.TAdmin;
 import com._520.crowdfunding.service.TAdminService;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -28,6 +27,29 @@ public class TAdminController {
     private TAdminService adminService;
 
 
+    // 跳转到修改页面
+    @RequestMapping("/toUpdate")
+    public String toUpdate(Integer id, Integer pageNum, Model model){
+        logger.info("修改用户的id = {}", id);
+        // 调用业务层得到指定id的用户
+        TAdmin admin = adminService.getTAdminById(id);
+        model.addAttribute("admin", admin);
+        model.addAttribute("id", id);
+        model.addAttribute("pageNum", pageNum);
+        logger.info("跳转到update界面..");
+        return "admin/update";
+    }
+
+    // 修改用户信息
+    @RequestMapping("/doUpdate")
+    public String doUpdate(TAdmin admin, Integer pageNum){
+        logger.info("请求参数中的 admin = {}", admin);
+        // 调用service完成修改
+        adminService.updateTAdmin(admin);
+
+        // 添加完成后去显示刚添加的数据
+        return "redirect:/admin/index?pageNum=" + pageNum;
+    }
     // 跳转到添加页面
     @RequestMapping("/toAdd")
     public String toAdd(){

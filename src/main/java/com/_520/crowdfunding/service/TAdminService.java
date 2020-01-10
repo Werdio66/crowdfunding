@@ -25,4 +25,15 @@ public interface TAdminService {
      * @param admin     添加的用户
      */
     void saveTAdmin(TAdmin admin);
+
+    /**
+     *  查询指定id的用户
+     */
+    TAdmin getTAdminById(Integer id);
+
+    /**
+     *  修改用户数据
+     * @param admin     修改后的数据
+     */
+    void updateTAdmin(TAdmin admin);
 }
