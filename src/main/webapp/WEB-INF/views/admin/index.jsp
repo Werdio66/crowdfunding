@@ -70,7 +70,7 @@
                                     <td>
                                         <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>
                                         <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href='${PATH}/admin/toUpdate?id=${admin.id}&pageNum=${adminPage.pageNum}'"><i class="glyphicon glyphicon-pencil"></i></button>
-                                        <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='${PATH}/admin/doDelete?id=${admin.id}&pageNum=${adminPage.pageNum}'"><i class="glyphicon glyphicon-remove"></i></button>
+                                        <button type="button" adminId="${admin.id}" class="deleteAdmin  btn btn-danger btn-xs" onclick=""><i class="glyphicon glyphicon-remove"></i></button>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -121,7 +121,18 @@
 <jsp:include page="/WEB-INF/views/common/js.jsp"/>
 <script type="text/javascript">
 
-    $("")
+    // 处理删除
+    $(".deleteAdmin").click(function () {
+
+        var id = $(this).attr("adminId");
+        layer.confirm("是否确定删除？", {btn : ["确定", "取消"]}, function (index) {
+            // 确认后
+            window.location.href = '${PATH}/admin/doDelete?pageNum=${adminPage.pageNum}&id=' + id;
+            layer.close(index);
+        }, function (index) {
+            layer.close(index);
+        })
+    });
 
     $(function () {
         $(".list-group-item").click(function(){
