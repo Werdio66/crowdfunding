@@ -94,4 +94,11 @@ public class TAdminServiceImpl implements TAdminService {
         key.setId(id);
         adminMapper.deleteByPrimaryKey(key);
     }
+
+    @Override
+    public void deleteBatch(List<Integer> idList) {
+        TAdminExample example = new TAdminExample();
+        example.createCriteria().andIdIn(idList);
+        adminMapper.deleteByExample(example);
+    }
 }

@@ -2,6 +2,8 @@ package com._520.crowdfunding.service;
 
 import com._520.crowdfunding.domain.TAdmin;
 import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 import java.util.Map;
 
 public interface TAdminService {
@@ -41,4 +43,10 @@ public interface TAdminService {
      *  删除指定id的用户
      */
     void deleteById(Integer id);
+
+    /**
+     *  批量删除
+     * @param idList    删除用户的id
+     */
+    void deleteBatch(List<Integer> idList);
 }

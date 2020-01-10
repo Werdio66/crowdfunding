@@ -12,8 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  *  处理用户的增删改查，登录后的主菜单页面
@@ -26,6 +25,20 @@ public class TAdminController {
     @Autowired
     private TAdminService adminService;
 
+    // 批量删除用户
+    @RequestMapping("/doDeleteBatch")
+    public String doDeleteBatch(String ids, Integer pageNum){
+        logger.debug("ids = {}", ids);
+        List<Integer> idList = new ArrayList<>();
+        String[] split = ids.split(",");
+        // 拆分ids
+        for (String s : split) {
+            idList.add(Integer.valueOf(s));
+        }
+        // 删除
+        adminService.deleteBatch(idList);
+        return "redirect:/admin/index?pageNum=" + pageNum;
+    }
 
     // 删除用户
     @RequestMapping("/doDelete")

@@ -59,8 +59,18 @@ public class HandleDispatherController {
     @RequestMapping("/main")
     public String main(HttpSession session) {
         // 查询所有的父菜单，将子菜单封装到父菜单中
-        List<TMenu> menuList = menuService.listAll();
-        session.setAttribute("menuList", menuList);
+        // 没有登录
+        if (session == null){
+            return "redirect:/login";
+        }
+
+        // 从session中取菜单列表
+        List<TMenu> menuList = (List<TMenu>) session.getAttribute("menuList");
+        // 第一次登录，从数据库取出
+        if (menuList == null){
+            menuList = menuService.listAll();
+            session.setAttribute("menuList", menuList);
+        }
         return "main";
     }
     // 处理登录
@@ -84,8 +94,5 @@ public class HandleDispatherController {
             model.addAttribute(Const.ERROR_MSG, e.getMessage());
             return "login";
         }
-
-
-
     }
 }

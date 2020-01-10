@@ -42,10 +42,10 @@
                                 <input class="form-control has-success" type="text" name="condition" value="${param.condition}" placeholder="请输入查询条件">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-warning" onclick="doQuery()"><i class="glyphicon glyphicon-search"></i> 查询</button>
+                        <button type="button" class="btn btn-warning" onclick="$('#queryForm').submit()"><i class="glyphicon glyphicon-search"></i> 查询</button>
                     </form>
 
-                    <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
+                    <button id="doDeleteBatch" type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
                     <button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='${PATH}/admin/toAdd'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
                     <br>
                     <hr style="clear:both;">
@@ -54,7 +54,7 @@
                             <thead>
                             <tr >
                                 <th width="30">#</th>
-                                <th width="30"><input type="checkbox"></th>
+                                <th width="30"><input type="checkbox" id="selectAll"></th>
                                 <th>账号</th>
                                 <th>名称</th>
                                 <th>邮箱地址</th>
@@ -65,7 +65,7 @@
                             <c:forEach items="${adminPage.list}" var="admin" varStatus="status">
                                 <tr>
                                     <td>${status.count}</td>
-                                    <td><input type="checkbox"></td>
+                                    <td><input type="checkbox" adminId="${admin.id}"></td>
                                     <td>${admin.loginacct}</td>
                                     <td>${admin.username}</td>
                                     <td>${admin.email}</td>
@@ -123,10 +123,42 @@
 <jsp:include page="/WEB-INF/views/common/js.jsp"/>
 <script type="text/javascript">
 
-    // 提交模糊查询表单
-    function doQuery(){
-        $('#queryForm').submit();
-    }
+    // 当点击时选中所有的用户
+    $("#selectAll").click(function () {
+        // 对tbody标签中的input标签中type为checkbox的标签，设置属性，attr用于自定义属性
+        // $("tbody input[type = 'checkbox']").attr('checked', this.checked);
+        $("tbody input[type = 'checkbox']").prop('checked', this.checked);
+    });
+
+    // 批量删除
+    $("#doDeleteBatch").click(function () {
+        // 拿到所有选中的用户
+        var checkboxList = $("tbody input[type = 'checkbox']:checked");
+        console.log(checkboxList);
+        // 没有选择删除对象
+        if (checkboxList.length === 0) {
+            layer.msg("请选择要删除的用户！", [btn = 5], 1000);
+            return false;
+        }
+
+        var ids = '';
+        var array = [];
+        // 对集合进行遍历
+        $.each(checkboxList, function (i, e) {
+            // 得到每一个选中的box绑定的 id
+            var adminId = $(e).attr("adminId");
+            /*// 将id封装成字符串
+            if (i !== 0){
+                ids += ',';
+            }
+            ids += adminId;*/
+            array.push(adminId);
+        });
+        ids = array.join(",");
+        console.log(ids);
+        // 跳转
+        window.location.href = '${PATH}/admin/doDeleteBatch?pageNum=${adminPage.pageNum}&ids=' + ids;
+    });
 
     // 处理删除
     $(".deleteAdmin").click(function () {
