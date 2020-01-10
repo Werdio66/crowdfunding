@@ -63,6 +63,14 @@
 <jsp:include page="common/js.jsp"/>
 <script>
     function dologin() {
+
+        // 表单校验
+        var username = $("#username").val();
+        var  password = $("#password").val();
+        if (!$.trim(username) || !$.trim(password)){
+            layer.msg("您输入的用户名或密码为空！", {icon : 5}, 2000);
+            return false;
+        }
         // 提交表单
         $("#loginForm").submit();
     }
