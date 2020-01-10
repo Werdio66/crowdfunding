@@ -27,6 +27,12 @@ public class TAdminController {
     private TAdminService adminService;
 
 
+    // 删除用户
+    @RequestMapping("/doDelete")
+    public String doDelete(Integer id, Integer pageNum){
+        adminService.deleteById(id);
+        return "redirect:/admin/index?pageNum=" + pageNum;
+    }
     // 跳转到修改页面
     @RequestMapping("/toUpdate")
     public String toUpdate(Integer id, Integer pageNum, Model model){

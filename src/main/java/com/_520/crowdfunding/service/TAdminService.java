@@ -36,4 +36,9 @@ public interface TAdminService {
      * @param admin     修改后的数据
      */
     void updateTAdmin(TAdmin admin);
+
+    /**
+     *  删除指定id的用户
+     */
+    void deleteById(Integer id);
 }
