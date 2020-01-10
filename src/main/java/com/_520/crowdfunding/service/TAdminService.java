@@ -19,4 +19,10 @@ public interface TAdminService {
      * @return      分页显示用户
      */
     PageInfo<TAdmin> listAdminPage(Map<String, Object> map);
+
+    /**
+     *  添加用户
+     * @param admin     添加的用户
+     */
+    void saveTAdmin(TAdmin admin);
 }

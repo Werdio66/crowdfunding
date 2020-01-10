@@ -20,11 +20,30 @@ import java.util.Map;
  *  处理用户的增删改查，登录后的主菜单页面
  */
 @Controller
+@RequestMapping("/admin")
 public class TAdminController {
     private Logger logger = LoggerFactory.getLogger(TAdminController.class);
 
     @Autowired
     private TAdminService adminService;
+
+
+    // 跳转到添加页面
+    @RequestMapping("/toAdd")
+    public String toAdd(){
+
+        return "admin/add";
+    }
+
+    // 跳转到添加页面
+    @RequestMapping("/doAdd")
+    public String doAdd(TAdmin admin){
+        logger.info("请求参数中的 admin = {}", admin);
+        // 调用service完成添加
+        adminService.saveTAdmin(admin);
+        // 添加完成后去显示刚添加的数据
+        return "redirect:/admin/index?pageNum=" + Integer.MAX_VALUE;
+    }
 
     /**
      * 处理登录后主页面的显示
@@ -32,7 +51,7 @@ public class TAdminController {
      * @param pageSize      每页的数量
      * @return              跳转
      */
-    @RequestMapping("/admin/index")
+    @RequestMapping("/index")
     public String index(@RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                         @RequestParam(value = "pageSize", required = false, defaultValue = "2") Integer pageSize,
                         Model model){

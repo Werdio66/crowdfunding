@@ -40,8 +40,9 @@
                 <bean class="com.github.pagehelper.PageInterceptor">
                     <property name="properties">
                         <!--使用下面的方式配置参数，一行配置一个 -->
+                        <!-- reasonable: 分页合理化-->
                         <value>
-                            helperDialect=mysql
+                            reasonable=true
                         </value>
                     </property>
                 </bean>

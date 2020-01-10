@@ -11,6 +11,17 @@ public class TAdmin extends TAdminKey {
 
     private String createtime;
 
+    @Override
+    public String toString() {
+        return "TAdmin{" +
+                "loginacct='" + loginacct + '\'' +
+                ", userpswd='" + userpswd + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", createtime='" + createtime + '\'' +
+                '}';
+    }
+
     public String getLoginacct() {
         return loginacct;
     }

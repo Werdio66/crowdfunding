@@ -1,6 +1,7 @@
 package com._520.crowdfunding.service.impl;
 
 import com._520.crowdfunding.common.exception.LoginException;
+import com._520.crowdfunding.common.util.AppDateUtils;
 import com._520.crowdfunding.common.util.Const;
 import com._520.crowdfunding.common.util.MD5Util;
 import com._520.crowdfunding.domain.TAdmin;
@@ -55,5 +56,15 @@ public class TAdminServiceImpl implements TAdminService {
         // 将查询的所有用户信息存到PageInfo中
 
         return new PageInfo<>(tAdmins, 5);
+    }
+
+    @Override
+    public void saveTAdmin(TAdmin admin) {
+        // 设置默认密码
+        admin.setUserpswd(MD5Util.digest(Const.DEFAULT_USERPSWD));
+        // 设置时间为当前时间
+        admin.setCreatetime(AppDateUtils.getFormatTime());
+        // 不完全添加
+        adminMapper.insertSelective(admin);
     }
 }
