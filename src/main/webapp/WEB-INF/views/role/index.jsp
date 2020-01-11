@@ -22,11 +22,13 @@
 
 <body>
 
-<%@include file="/WEB-INF/views/common/top.jsp"%>
+<jsp:include page="/WEB-INF/views/common/top.jsp"/>
 
 <div class="container-fluid">
     <div class="row">
-        <%@include file="/WEB-INF/views/common/sidebar.jsp"%>
+
+        <jsp:include page="/WEB-INF/views/common/sidebar.jsp"/>
+
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -37,10 +39,10 @@
                         <div class="form-group has-feedback">
                             <div class="input-group">
                                 <div class="input-group-addon">查询条件</div>
-                                <input class="form-control has-success" type="text" placeholder="请输入查询条件">
+                                <input id="condition" class="form-control has-success" type="text" placeholder="请输入查询条件">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询</button>
+                        <button id="queryBtn" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询</button>
                     </form>
                     <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
                     <button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='form.html'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
@@ -56,13 +58,13 @@
                                 <th width="100">操作</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbody_role">
 
                             </tbody>
                             <tfoot>
                             <tr >
                                 <td colspan="6" align="center">
-                                    <ul class="pagination">
+                                    <ul id="navg_role" class="pagination">
 
                                     </ul>
                                 </td>
@@ -97,18 +99,20 @@
         initDate(1);
     });
 
+    var json = {
+        pageNum : 1,
+        pageSize : 3
+    };
+
     // 发起异步请求
     function initDate(pageNum) {
+        json.pageNum = pageNum;
 
-        var json = {
-            pageNum : 1,
-            pageSize : 3
-        };
         // 弹窗的标志
         var flag = -1;
         $.ajax({
             type : "post",
-            url : "${PATH}/role/loadDate?pageNum=" + pageNum,
+            url : "${PATH}/role/loadDate",
             // 传输的数据json格式
             data : json,
             // 发起请求之前做得事，表单校验等
@@ -134,7 +138,7 @@
     function initShow(result) {
         console.log(result);
         // 每次刷新界面前清除之前的页面
-        $("tbody").empty();
+        $("#tbody_role").empty();
         // 得到返回结果中的角色对象
         var role = result.list;
         console.log(role);
@@ -156,7 +160,7 @@
     function initNavg(result) {
         console.log("分页");
         // 每次刷新界面前清除之前的页面
-        $("ul").empty();
+        $("#navg_role").empty();
         // 导航数组
         var pageSize = result.navigatepageNums;
         console.log("pageSize = ", pageSize);
@@ -184,6 +188,11 @@
         }
     }
 
+    $("#queryBtn").click(function () {
+        // 将输入的条件存放在json中
+        json.condition = $("#condition").val();
+        initDate(1);
+    });
 
 </script>
 </body>

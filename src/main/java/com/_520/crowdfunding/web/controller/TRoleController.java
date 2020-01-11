@@ -50,6 +50,7 @@ public class TRoleController {
                                     @RequestParam(value = "condition", required = false, defaultValue = "")String condition){
 
         logger.debug("pageNum = {}, pageSize = {}", pageNum, pageSize);
+        logger.debug("condition = {}", condition);
         // 线程绑定
         PageHelper.startPage(pageNum, pageSize);
         Map<String, Object> map = new HashMap<>();
