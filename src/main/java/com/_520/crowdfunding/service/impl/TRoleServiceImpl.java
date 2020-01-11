@@ -2,6 +2,7 @@ package com._520.crowdfunding.service.impl;
 
 import com._520.crowdfunding.domain.TRole;
 import com._520.crowdfunding.domain.TRoleExample;
+import com._520.crowdfunding.domain.TRoleKey;
 import com._520.crowdfunding.mapper.TRoleMapper;
 import com._520.crowdfunding.service.TRoleService;
 import com.github.pagehelper.PageInfo;
@@ -32,5 +33,17 @@ public class TRoleServiceImpl implements TRoleService {
     @Override
     public Integer add(TRole role) {
         return roleMapper.insertSelective(role);
+    }
+
+    @Override
+    public TRole getRoleById(Integer id) {
+        TRoleKey key = new TRoleKey();
+        key.setId(id);
+        return roleMapper.selectByPrimaryKey(key);
+    }
+
+    @Override
+    public Integer updateById(TRole role) {
+        return roleMapper.updateByPrimaryKeySelective(role);
     }
 }

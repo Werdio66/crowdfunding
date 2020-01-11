@@ -36,7 +36,25 @@ public class TRoleController {
         return "role/index";
     }
 
-
+    @ResponseBody
+    @RequestMapping("/doUpdate")
+    public Integer doUpdate(TRole role){
+        logger.debug("修改的数据 = {}", role);
+        Integer msg = roleService.updateById(role);
+        logger.debug("更新后返回的结果是 : {}", msg);
+        return msg;
+    }
+    /**
+     *  获取指定id的role对象
+     */
+    @ResponseBody
+    @RequestMapping("/getRole")
+    public TRole getRole(Integer id){
+        logger.debug("update role id = {}", id);
+        TRole roleById = roleService.getRoleById(id);
+        logger.debug("update role = {}", roleById);
+        return roleById;
+    }
     @ResponseBody
     @RequestMapping("/addRole")
     public Integer addRole(TRole role){

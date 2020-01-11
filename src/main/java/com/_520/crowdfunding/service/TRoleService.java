@@ -12,5 +12,15 @@ public interface TRoleService {
      */
     PageInfo<TRole> listAllTRole(Map<String, Object> map);
 
+    /**
+     *  增加角色
+     */
     Integer add(TRole role);
+
+    TRole getRoleById(Integer id);
+
+    /**
+     *  修改指定id的角色
+     */
+    Integer updateById(TRole role);
 }

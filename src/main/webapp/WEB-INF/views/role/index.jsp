@@ -79,7 +79,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- addModal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -96,6 +96,29 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <button id="saveBtn" type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- updateModal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">修改角色</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">角色名称</label>
+                    <input type="text" class="form-control" value="" id="updateName" name="updateName" placeholder="请输入角色名称">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="updateBtn" type="button" class="btn btn-primary">保存</button>
             </div>
         </div>
     </div>
@@ -126,6 +149,7 @@
         pageSize : 3
     };
 
+    var curentPage = 1;
     // 发起异步请求
     function initDate(pageNum) {
         json.pageNum = pageNum;
@@ -156,7 +180,7 @@
             }
         });
     }
-
+    // ---------------- 展示数据 ------------------------
     function initShow(result) {
         console.log(result);
         // 每次刷新界面前清除之前的页面
@@ -172,13 +196,14 @@
             tr.append('<td>' + e.name + '</td>');
             var td = $('<td></td>');
             td.append('<button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>');
-            td.append('<button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>');
+            td.append('<button type="button" roleId="' + e.id + '" class="updateClass btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>');
             td.append('<button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>');
             tr.append(td);
             tr.appendTo($("tbody"));
         });
     }
 
+    // ---------------- 分页 ------------------------
     function initNavg(result) {
         console.log("分页");
         // 每次刷新界面前清除之前的页面
@@ -195,6 +220,7 @@
         // 迭代导航页
         $.each(pageSize, function (i, num) {
             if (result.pageNum === num){
+                curentPage = num;
                 console.log("高亮，当前页 ：", num);
                 $(".pagination").append('<li class="active"><a onclick="initDate(' + num + ')">' + num + '<span class="sr-only">(current)</span></a></li>');
             } else {
@@ -210,11 +236,14 @@
         }
     }
 
+    // 按条件查询
     $("#queryBtn").click(function () {
         // 将输入的条件存放在json中
         json.condition = $("#condition").val();
         initDate(1);
     });
+
+    // ---------------- 增加 ------------------------
 
     // 点击新增
     $("#addBtn").click(function () {
@@ -224,6 +253,7 @@
             keyboard : false
         });
     });
+
     $("#saveBtn").click(function () {
         // 拿到新增的name
         var name = $("#addModal input[name='name']").val();
@@ -251,6 +281,81 @@
                 }
             }
         })
+    });
+
+    // ---------------- 修改 ------------------------
+
+    function openUpdateWindow(){
+        // 调用模态框
+        $("#updateModal").modal({
+            backdrop : false,
+            keyboard : false
+        });
+    }
+
+    // 要回写的值，便于判断用户是否修改
+    var roleName = '';
+    var roleId = -1;
+    var role = {
+        id : roleId
+    };
+    // 给tbody标签中的class属性为updateClass的增加click事件，
+    $("tbody").on('click', '.updateClass', function () {
+        // 获取自定义属性的值
+        role.id = $(this).attr("roleId");
+        console.log("role.id = ", role.id);
+        // 传递给后台，查询对应的名称
+        $.ajax({
+            type : 'post',
+            url : '${PATH}/role/getRole',
+            data : role,
+            beforeSend : function () {
+                return true;
+            },
+            success : function (result) {
+                // 回调函数
+                roleName = result.name;
+                console.log('修改的名称 = ', roleName);
+                // 回写
+                $("#updateName").prop('value', roleName);
+                openUpdateWindow();
+            }
+        });
+    });
+
+    // 对模态框中的保存按钮，增加事件
+    $("#updateBtn").click(function () {
+        // 取到修改后的值
+        var name = $("#updateName").val();
+        // 将name存到json中
+        role.name = name;
+        console.log("用户输入的要修改的值 = ", role.name);
+        // 将修改的值传到后台
+        $.ajax({
+           type : 'post',
+           url : '${PATH}/role/doUpdate',
+           data : role,
+            beforeSend : function () {
+                // 没有修改
+                if (name === roleName) {
+                    layer.msg("请确认是否已经修改名称！");
+                    return false;
+                }
+                console.log("json = ", role);
+                return true;
+            },
+            success: function (result) {
+               // 修改成功
+                if (result === 1) {
+                    layer.msg("修改成功！");
+                    // 关闭模态框
+                    $("#updateModal").modal('hide');
+                    // 重新刷新页面
+                    console.log("当前页 = ", curentPage);
+                    initDate(curentPage);
+                }
+            }
+        });
     });
 </script>
 </body>
