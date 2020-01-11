@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +38,25 @@ public class TRoleController {
         return "role/index";
     }
 
+    // 删除单个
+    @ResponseBody
+    @RequestMapping("/doDelete")
+    public Integer doDelete(Integer id){
+        return roleService.deleteById(id);
+    }
+
+    // 批量删除
+    @ResponseBody
+    @RequestMapping("/doDeleteBatch")
+    public Integer doDeleteBatch(String ids){
+        String[] split = ids.split(",");
+        List<Integer> list = new ArrayList<>();
+        for (String str : split){
+            list.add(Integer.valueOf(str));
+        }
+
+        return roleService.deleteBatch(list);
+    }
     @ResponseBody
     @RequestMapping("/doUpdate")
     public Integer doUpdate(TRole role){

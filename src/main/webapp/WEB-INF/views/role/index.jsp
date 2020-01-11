@@ -44,7 +44,7 @@
                         </div>
                         <button id="queryBtn" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询</button>
                     </form>
-                    <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
+                    <button id="doDeleteBatch" type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
                     <button id="addBtn" type="button" class="btn btn-primary" style="float:right;"><i class="glyphicon glyphicon-plus"></i> 新增</button>
                     <br>
                     <hr style="clear:both;">
@@ -53,11 +53,12 @@
                             <thead>
                             <tr >
                                 <th width="30">#</th>
-                                <th width="30"><input type="checkbox"></th>
+                                <th width="30"><input id="selectAll" type="checkbox"></th>
                                 <th>名称</th>
                                 <th width="100">操作</th>
                             </tr>
                             </thead>
+
                             <tbody id="tbody_role">
 
                             </tbody>
@@ -192,18 +193,22 @@
         $.each(role, function (i, e) {
             var tr = $('<tr></tr>');
             tr.append('<td>' + (i + 1) + '</td>');
-            tr.append('<td><input type="checkbox"></td>');
+            tr.append('<td><input class="deleteBatchClass" deleteBatchId="' + e.id + '" type="checkbox"></td>');
             tr.append('<td>' + e.name + '</td>');
             var td = $('<td></td>');
             td.append('<button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>');
             td.append('<button type="button" roleId="' + e.id + '" class="updateClass btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>');
-            td.append('<button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>');
+            td.append('<button type="button" deleteId="' + e.id + '" class="deleteClass btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>');
             tr.append(td);
             tr.appendTo($("tbody"));
         });
     }
 
     // ---------------- 分页 ------------------------
+
+    // 声明最后一页
+    var lastPage = 1;
+
     function initNavg(result) {
         console.log("分页");
         // 每次刷新界面前清除之前的页面
@@ -232,6 +237,8 @@
         if (!result.isLastPage) {
             $(".pagination").append('<li><a onclick="initDate(' + result.nextPage + ')">下一页</a></li>');
         }else {
+            lastPage = result.pageNum;
+            console.log("最后一页 = ", lastPage);
             $(".pagination").append('<li class="disabled"><a href="#">下一页</a></li>');
         }
     }
@@ -272,12 +279,15 @@
                     layer.msg("保存成功！", {time: 1000}, function () {
                         // 关闭弹窗
                         $("#addModal").modal('hide');
-
+                        // 增加完成后删除刚才输入的数据
+                        $("#addModal input[name='name']").prop('value', '');
+                        // 增加完成后跳转到新增角色的页面
+                        initDate(lastPage + 1);
                     });
                 }else if (-1 === num) {
-                    layer.msg("您输入的名称为空！");
+                    layer.msg("您输入的名称为空！", {time: 1000});
                 }else {
-                    layer.msg("保存失败！");
+                    layer.msg("保存失败！", {time: 1000});
                 }
             }
         })
@@ -338,7 +348,7 @@
             beforeSend : function () {
                 // 没有修改
                 if (name === roleName) {
-                    layer.msg("请确认是否已经修改名称！");
+                    layer.msg("请确认是否已经修改名称！", {time : 1000});
                     return false;
                 }
                 console.log("json = ", role);
@@ -347,16 +357,102 @@
             success: function (result) {
                // 修改成功
                 if (result === 1) {
-                    layer.msg("修改成功！");
+                    layer.msg("修改成功！", {time : 1000});
                     // 关闭模态框
                     $("#updateModal").modal('hide');
                     // 重新刷新页面
                     console.log("当前页 = ", curentPage);
                     initDate(curentPage);
+                }else {
+                    layer.msg("修改失败", {time : 1000});
                 }
             }
         });
     });
+
+    //----------------------------单个删除------------------------------
+
+    // 为所有的删除按钮增加事件
+    $("tbody").on('click', '.deleteClass', function () {
+        // 拿到当前对象中的id
+        var deleteId = $(this).attr('deleteId');
+        layer.confirm("是否确定删除？", {btn : ["确定", "取消"]}, function (index) {
+            // 确认后
+            layer.close(index);
+            console.log("删除对象的id = ", deleteId);
+            $.ajax({
+                type : 'post',
+                url : '${PATH}/role/doDelete',
+                data : {
+                    id : deleteId
+                },
+                success : function (msg) {
+                    if (msg === 1){
+                        layer.msg("删除成功！", {time : 1000});
+                        // 刷新页面
+                        initDate(curentPage);
+                    } else {
+                        layer.msg("删除失败！", {time : 1000});
+                    }
+                }
+            });
+
+        }, function (index) {
+            layer.close(index);
+        })
+    })
+
+
+    //----------------------------批量删除------------------------------
+
+    // 对选择框增加事件
+    $("#selectAll").click(function () {
+        $("tbody input[type = 'checkbox']").prop('checked', this.checked);
+    });
+
+    // 点击删除
+    $("#doDeleteBatch").click(function () {
+        // 得到删除组件
+        var list = $("tbody input[type = 'checkbox']:checked");
+        // 没有选择
+        if (list.length === 0){
+            layer.msg("请选择要删除的角色！");
+            return false;
+        }
+
+        var ids = '';
+        var array = [];
+        // 遍历组件找到 id
+        $.each(list, function (i, num) {
+            // 将每个id存到数组中
+            array.push($(num).attr("deleteBatchId"));
+        });
+        // 将数组中的数用逗号分隔，并返回一个字符串
+        ids = array.join(',');
+        console.log("删除的所有角色的id ：", ids);
+
+        // 使用ajax将id传到后台
+        $.ajax({
+            type : 'get',
+            url : '${PATH}/role/doDeleteBatch',
+            data : {
+                ids : ids
+            },
+            success : function (msg) {
+                if (msg === 0){
+                    layer.msg("删除失败！", {time : 1000});
+                }else {
+                    layer.msg("删除成功！", {time : 1000});
+                    // 刷新页面
+                    initDate(curentPage);
+                    // 将选中的复选框取消
+                    $('#selectAll').prop('checked', '');
+                }
+            }
+        });
+    });
+
+
 </script>
 </body>
 </html>

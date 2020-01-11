@@ -46,4 +46,18 @@ public class TRoleServiceImpl implements TRoleService {
     public Integer updateById(TRole role) {
         return roleMapper.updateByPrimaryKeySelective(role);
     }
+
+    @Override
+    public Integer deleteById(Integer id) {
+        TRoleKey key = new TRoleKey();
+        key.setId(id);
+        return roleMapper.deleteByPrimaryKey(key);
+    }
+
+    @Override
+    public Integer deleteBatch(List<Integer> list) {
+        TRoleExample example = new TRoleExample();
+        example.createCriteria().andIdIn(list);
+        return roleMapper.deleteByExample(example);
+    }
 }
