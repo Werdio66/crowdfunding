@@ -6,7 +6,7 @@
             <c:forEach items="${menuList}" var="parent">
                 <c:if test="${empty parent.child}">
                     <li class="list-group-item tree-closed" >
-                        <a href="${parent.url}"><i class="${parent.icon}">${parent.name}</i></a>
+                        <a href="${PATH}/${parent.url}"><i class="${parent.icon}">${parent.name}</i></a>
                     </li>
                 </c:if>
                 <c:if test="${not empty parent.child}">
@@ -15,7 +15,7 @@
                         <ul style="margin-top:10px;display:none;">
                             <c:forEach items="${parent.child}" var="child">
                                 <li style="height:30px;">
-                                    <a href="${child.url}"><i class="${child.icon}"></i> ${child.name}</a>
+                                    <a href="${PATH}/${child.url}"><i class="${child.icon}"></i> ${child.name}</a>
                                 </li>
                             </c:forEach>
                         </ul>
