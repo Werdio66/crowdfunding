@@ -36,6 +36,15 @@ public class TRoleController {
         return "role/index";
     }
 
+
+    @ResponseBody
+    @RequestMapping("/addRole")
+    public Integer addRole(TRole role){
+        if ("".equals(role.getName())){
+            return -1;
+        }
+        return roleService.add(role);
+    }
     /**
      *      查询数据
      * @param pageNum       当前页

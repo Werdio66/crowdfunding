@@ -28,4 +28,9 @@ public class TRoleServiceImpl implements TRoleService {
         List<TRole> tRoles = roleMapper.selectByExample(example);
         return new PageInfo<>(tRoles, 5);
     }
+
+    @Override
+    public Integer add(TRole role) {
+        return roleMapper.insertSelective(role);
+    }
 }

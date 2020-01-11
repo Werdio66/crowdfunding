@@ -11,4 +11,6 @@ public interface TRoleService {
      * @return          分页的结果
      */
     PageInfo<TRole> listAllTRole(Map<String, Object> map);
+
+    Integer add(TRole role);
 }

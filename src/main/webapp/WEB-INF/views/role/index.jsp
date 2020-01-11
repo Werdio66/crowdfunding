@@ -45,7 +45,7 @@
                         <button id="queryBtn" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询</button>
                     </form>
                     <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
-                    <button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='form.html'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+                    <button id="addBtn" type="button" class="btn btn-primary" style="float:right;"><i class="glyphicon glyphicon-plus"></i> 新增</button>
                     <br>
                     <hr style="clear:both;">
                     <div class="table-responsive">
@@ -74,6 +74,28 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">增加角色</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">角色名称</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="请输入角色名称">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="saveBtn" type="button" class="btn btn-primary">保存</button>
             </div>
         </div>
     </div>
@@ -194,6 +216,42 @@
         initDate(1);
     });
 
+    // 点击新增
+    $("#addBtn").click(function () {
+        // 调用模态框
+        $("#addModal").modal({
+            backdrop : false,
+            keyboard : false
+        });
+    });
+    $("#saveBtn").click(function () {
+        // 拿到新增的name
+        var name = $("#addModal input[name='name']").val();
+        //
+        $.ajax({
+            type : 'post',
+            url : '${PATH}/role/addRole',
+            data : {
+                name : name
+            },
+            beforeSend : function () {
+                return true;
+            },
+            success : function (num) {
+                if (1 === num) {
+                    layer.msg("保存成功！", {time: 1000}, function () {
+                        // 关闭弹窗
+                        $("#addModal").modal('hide');
+
+                    });
+                }else if (-1 === num) {
+                    layer.msg("您输入的名称为空！");
+                }else {
+                    layer.msg("保存失败！");
+                }
+            }
+        })
+    });
 </script>
 </body>
 </html>
