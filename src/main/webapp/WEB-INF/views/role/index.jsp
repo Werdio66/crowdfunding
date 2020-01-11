@@ -63,13 +63,7 @@
                             <tr >
                                 <td colspan="6" align="center">
                                     <ul class="pagination">
-                                        <li class="disabled"><a href="#">上一页</a></li>
-                                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li><a href="#">下一页</a></li>
+
                                     </ul>
                                 </td>
                             </tr>
@@ -108,13 +102,13 @@
 
         var json = {
             pageNum : 1,
-            pageSize : 8
+            pageSize : 3
         };
         // 弹窗的标志
         var flag = -1;
         $.ajax({
             type : "post",
-            url : "${PATH}/role/loadDate",
+            url : "${PATH}/role/loadDate?pageNum=" + pageNum,
             // 传输的数据json格式
             data : json,
             // 发起请求之前做得事，表单校验等
@@ -139,6 +133,8 @@
 
     function initShow(result) {
         console.log(result);
+        // 每次刷新界面前清除之前的页面
+        $("tbody").empty();
         // 得到返回结果中的角色对象
         var role = result.list;
         console.log(role);
@@ -159,6 +155,33 @@
 
     function initNavg(result) {
         console.log("分页");
+        // 每次刷新界面前清除之前的页面
+        $("ul").empty();
+        // 导航数组
+        var pageSize = result.navigatepageNums;
+        console.log("pageSize = ", pageSize);
+        // 拼接第一页
+        if (!result.isFirstPage) {
+            $(".pagination").append('<li><a onclick="initDate(' + result.prePage + ')">上一页</a></li>');
+        }else {
+            $(".pagination").append('<li class="disabled"><a href="#">上一页</a></li>');
+        }
+        // 迭代导航页
+        $.each(pageSize, function (i, num) {
+            if (result.pageNum === num){
+                console.log("高亮，当前页 ：", num);
+                $(".pagination").append('<li class="active"><a onclick="initDate(' + num + ')">' + num + '<span class="sr-only">(current)</span></a></li>');
+            } else {
+                console.log("当前页 ：", num);
+                $(".pagination").append('<li><a onclick="initDate(' + num + ')">' + num + '</a></li>');
+            }
+        });
+        // 拼接最后一页
+        if (!result.isLastPage) {
+            $(".pagination").append('<li><a onclick="initDate(' + result.nextPage + ')">下一页</a></li>');
+        }else {
+            $(".pagination").append('<li class="disabled"><a href="#">下一页</a></li>');
+        }
     }
 
 
