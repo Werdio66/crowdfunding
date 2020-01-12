@@ -38,6 +38,12 @@ public class TMenuController {
         return menuService.updateMenu(menu);
     }
 
+    @ResponseBody
+    @RequestMapping("/deleteById")
+    public Integer deleteById(Integer id){
+
+        return menuService.deleteById(id);
+    }
     //
     @ResponseBody
     @RequestMapping("/getMenuById")

@@ -76,4 +76,11 @@ public class TMenuServiceImpl implements TMenuService {
         key.setId(id);
         return menuMapper.selectByPrimaryKey(key);
     }
+
+    @Override
+    public Integer deleteById(Integer id) {
+        TMenuKey key = new TMenuKey();
+        key.setId(id);
+        return menuMapper.deleteByPrimaryKey(key);
+    }
 }

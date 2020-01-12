@@ -308,6 +308,34 @@
     });
     // ==========================删除菜单========================================
 
+    function deleteBtn(id) {
+        //
+        console.log("删除的 id = ", id);
+        layer.confirm("请确认是否删除？", {btn : ['确定', '取消']}, function(index) {
+        // 确认删除后继续执行
+        layer.close(index);
+        $.ajax({
+            type : 'get',
+            url : '${PATH}/menu/deleteById',
+            data : {
+                id : id
+            },
+            success : function(msg) {
+                if (msg === 1){
+                    layer.msg("删除成功！", {time : 1000});
+                    // 刷新菜单
+                    initTree();
+                }else {
+                    layer.msg("删除失败！", {time : 1000});
+                    initTree();
+                }
+            }
+        })
+        }, function(index) {
+        // 关闭窗口
+        layer.close(index);
+        });
+    }
 
 </script>
 </body>

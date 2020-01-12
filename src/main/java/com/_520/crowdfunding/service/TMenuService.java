@@ -29,4 +29,9 @@ public interface TMenuService {
      *  通过id查询
      */
     TMenu getMenuById(Integer id);
+
+    /**
+     *  删除指定id菜单
+     */
+    Integer deleteById(Integer id);
 }
