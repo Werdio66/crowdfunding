@@ -36,4 +36,28 @@ public interface TRoleService {
      * @param list      要删除的所有id
      */
     Integer deleteBatch(List<Integer> list);
+
+    /**
+     *  查询所有角色
+     */
+    List<TRole> listAll();
+
+    /**
+     *  查找出指定id用户已分配的角色id
+     */
+    List<Integer> getRoleIdByAdminId(Integer id);
+
+    /**
+     *  为用户分配角色，维护中间表
+     * @param adminId        用户id
+     * @param roleIds       分配角色的id
+     */
+    Integer protectAdmainAndRole(Integer adminId, List<Integer> roleIds);
+
+    /**
+     *  为用户取消分配角色
+     * @param adminId       用户id
+     * @param roleIds       取消分配角色的id
+     */
+    Integer protectAdmainAndRoleByDelete(Integer adminId, List<Integer> roleIds);
 }

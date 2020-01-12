@@ -70,7 +70,7 @@
                                     <td>${admin.username}</td>
                                     <td>${admin.email}</td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>
+                                        <button type="button" class="btn btn-success btn-xs" onclick="window.location.href='${PATH}/admin/toAssignRole?id=${admin.id}'"><i class=" glyphicon glyphicon-check"></i></button>
                                         <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href='${PATH}/admin/toUpdate?id=${admin.id}&pageNum=${adminPage.pageNum}'"><i class="glyphicon glyphicon-pencil"></i></button>
                                         <button type="button" adminId="${admin.id}" class="deleteAdmin  btn btn-danger btn-xs" onclick=""><i class="glyphicon glyphicon-remove"></i></button>
                                     </td>

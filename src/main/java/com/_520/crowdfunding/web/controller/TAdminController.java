@@ -1,7 +1,10 @@
 package com._520.crowdfunding.web.controller;
 
+import com._520.crowdfunding.common.util.StringUtil;
 import com._520.crowdfunding.domain.TAdmin;
+import com._520.crowdfunding.domain.TRole;
 import com._520.crowdfunding.service.TAdminService;
+import com._520.crowdfunding.service.TRoleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
 
@@ -25,6 +29,66 @@ public class TAdminController {
     @Autowired
     private TAdminService adminService;
 
+    @Autowired
+    private TRoleService roleService;
+
+    // 跳转到角色分配界面
+    @RequestMapping("/toAssignRole")
+    public String toAssignRole(@RequestParam(value = "id", required = false) Integer id, Model model){
+
+        // 1.查询所有的角色
+        List<TRole> allRoleList = roleService.listAll();
+        // 2.查询指定id的用户对应的角色id
+        List<Integer> roleIdList = roleService.getRoleIdByAdminId(id);
+        // 已分配的角色
+        List<TRole> assignedList = new ArrayList<>();
+        // 未分配的角色
+        List<TRole> unAssignedList = new ArrayList<>();
+
+        for (TRole role : allRoleList) {
+           if (roleIdList.contains(role.getId())){
+               // 3.分离出已分配的角色
+               assignedList.add(role);
+           }else {
+               // 4.分离出未分配的角色
+               unAssignedList.add(role);
+           }
+        }
+
+        logger.debug("all = {}", allRoleList);
+        logger.debug("assigned = {}", assignedList);
+        logger.debug("unAssigned = {}", unAssignedList);
+
+        model.addAttribute("assignedList", assignedList);
+        model.addAttribute("unAssignedList", unAssignedList);
+        if (id != null){
+            model.addAttribute("id", id);
+        }
+        return "admin/assignRole";
+    }
+
+    // 分配角色
+    @ResponseBody
+    @RequestMapping("/assignRole")
+    public Integer assignRole(Integer id, String ids){
+        logger.debug("id = {}", id);
+        logger.debug("ids = {}", ids);
+        // 将字符串转换为List
+        List<Integer> idList = StringUtil.getIntegerListByStr(ids, ",");
+        return roleService.protectAdmainAndRole(id, idList);
+    }
+
+    /**
+     *  给指定用户取消角色分配
+     * @param id        用户id
+     * @param ids       所有角色的id
+     */
+    @ResponseBody
+    @RequestMapping("/unAssignRole")
+    public Integer unAssignRole(Integer id, String ids){
+        List<Integer> idList = StringUtil.getIntegerListByStr(ids, ",");
+        return roleService.protectAdmainAndRoleByDelete(id, idList);
+    }
     // 批量删除用户
     @RequestMapping("/doDeleteBatch")
     public String doDeleteBatch(String ids, Integer pageNum){

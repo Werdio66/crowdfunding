@@ -10,4 +10,12 @@ public class TRole extends TRoleKey {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "TRole{" +
+                "id='" + super.getId() + '\'' +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

@@ -1,14 +1,14 @@
 package com._520.crowdfunding.service.impl;
 
-import com._520.crowdfunding.domain.TRole;
-import com._520.crowdfunding.domain.TRoleExample;
-import com._520.crowdfunding.domain.TRoleKey;
+import com._520.crowdfunding.domain.*;
+import com._520.crowdfunding.mapper.TAdminRoleMapper;
 import com._520.crowdfunding.mapper.TRoleMapper;
 import com._520.crowdfunding.service.TRoleService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +17,9 @@ public class TRoleServiceImpl implements TRoleService {
 
     @Autowired
     private TRoleMapper roleMapper;
+
+    @Autowired
+    private TAdminRoleMapper adminRoleMapper;
 
     @Override
     public PageInfo<TRole> listAllTRole(Map<String, Object> map) {
@@ -59,5 +62,47 @@ public class TRoleServiceImpl implements TRoleService {
         TRoleExample example = new TRoleExample();
         example.createCriteria().andIdIn(list);
         return roleMapper.deleteByExample(example);
+    }
+
+    @Override
+    public List<TRole> listAll() {
+        return roleMapper.selectByExample(null);
+    }
+
+    @Override
+    public List<Integer> getRoleIdByAdminId(Integer id) {
+
+        TAdminRoleExample example = new TAdminRoleExample();
+        example.createCriteria().andAdminidEqualTo(id);
+
+        List<TAdminRole> tAdminRoles = adminRoleMapper.selectByExample(example);
+
+        List<Integer> ids = new ArrayList<>();
+        for (TAdminRole adminRole : tAdminRoles){
+            ids.add(adminRole.getRoleid());
+        }
+        return ids;
+    }
+
+    @Override
+    public Integer protectAdmainAndRole(Integer adminId, List<Integer> roleIds) {
+        int count = 0;
+        for (Integer roleId : roleIds) {
+            TAdminRole adminRole = new TAdminRole(adminId, roleId);
+            count += adminRoleMapper.insertSelective(adminRole);
+        }
+        return count;
+    }
+
+    @Override
+    public Integer protectAdmainAndRoleByDelete(Integer adminId, List<Integer> roleIds) {
+        int count = 0;
+
+        for (Integer roleId : roleIds) {
+            TAdminRoleExample example = new TAdminRoleExample();
+            example.createCriteria().andAdminidEqualTo(adminId).andRoleidEqualTo(roleId);
+            count += adminRoleMapper.deleteByExample(example);
+        }
+        return count;
     }
 }

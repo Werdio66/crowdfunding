@@ -5,6 +5,13 @@ public class TAdminRole extends TAdminRoleKey {
 
     private Integer roleid;
 
+    public TAdminRole(){}
+
+    public TAdminRole(Integer adminid, Integer roleid) {
+        this.adminid = adminid;
+        this.roleid = roleid;
+    }
+
     public Integer getAdminid() {
         return adminid;
     }
