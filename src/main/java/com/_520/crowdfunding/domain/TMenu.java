@@ -12,7 +12,15 @@ public class TMenu extends TMenuKey {
 
     private String url;
 
-    private List<TMenu> child = new ArrayList<>();
+    private List<TMenu> children = new ArrayList<>();
+
+    public List<TMenu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<TMenu> children) {
+        this.children = children;
+    }
 
     @Override
     public String toString() {
@@ -21,16 +29,8 @@ public class TMenu extends TMenuKey {
                 ", name='" + name + '\'' +
                 ", icon='" + icon + '\'' +
                 ", url='" + url + '\'' +
-                ", child=" + child +
+                ", children=" + children +
                 '}';
-    }
-
-    public List<TMenu> getChild() {
-        return child;
-    }
-
-    public void setChild(List<TMenu> child) {
-        this.child = child;
     }
 
     public Integer getPid() {

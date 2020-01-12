@@ -1,6 +1,8 @@
 package com._520.crowdfunding.service.impl;
 
 import com._520.crowdfunding.domain.TMenu;
+import com._520.crowdfunding.domain.TMenuExample;
+import com._520.crowdfunding.domain.TMenuKey;
 import com._520.crowdfunding.mapper.TMenuMapper;
 import com._520.crowdfunding.service.TMenuService;
 import org.slf4j.Logger;
@@ -44,11 +46,34 @@ public class TMenuServiceImpl implements TMenuService {
                 // 取出子菜单的父菜单
                 TMenu tMenu = cache.get(menu.getPid());
                 // 将子菜单存入父菜单中
-                tMenu.getChild().add(menu);
+                tMenu.getChildren().add(menu);
             }
         }
 
         logger.info("parent =  {}", parentMenu);
         return parentMenu;
+    }
+
+    @Override
+    public List<TMenu> listAllNotFormat() {
+        TMenuExample example = new TMenuExample();
+        return menuMapper.selectByExample(null);
+    }
+
+    @Override
+    public Integer addMenu(TMenu menu) {
+        return menuMapper.insertSelective(menu);
+    }
+
+    @Override
+    public Integer updateMenu(TMenu menu) {
+        return menuMapper.updateByPrimaryKeySelective(menu);
+    }
+
+    @Override
+    public TMenu getMenuById(Integer id) {
+        TMenuKey key = new TMenuKey();
+        key.setId(id);
+        return menuMapper.selectByPrimaryKey(key);
     }
 }
