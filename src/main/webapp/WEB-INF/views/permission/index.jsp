@@ -48,20 +48,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">增加模块</h4>
+                <h4 class="modal-title" id="myModalLabel">添加许可</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="name">模块名称</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="请输入模块名称">
+                    <label for="name">许可名称</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="请输入许可名称">
                 </div>
                 <div class="form-group">
-                    <label for="name">模块title</label>
-                    <input type="text" class="form-control" id="url" name="title" placeholder="请输入菜单title">
+                    <label for="name">许可标题</label>
+                    <input type="text" class="form-control" id="url" name="title" placeholder="请输入许可标题">
                 </div>
                 <div class="form-group">
-                    <label for="name">模块图标</label>
-                    <input type="text" class="form-control" id="icon" name="icon" placeholder="请输入模块图标">
+                    <label for="name">许可图标</label>
+                    <input type="text" class="form-control" id="icon" name="icon" placeholder="请输入许可图标">
                 </div>
             </div>
             <div class="modal-footer">
@@ -78,20 +78,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">修改模块</h4>
+                <h4 class="modal-title" id="">修改许可</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="name">模块名称</label>
-                    <input type="text" class="form-control" id="updateName" name="name" placeholder="请输入模块名称">
+                    <label for="name">许可名称</label>
+                    <input type="text" class="form-control" id="updateName" name="name" placeholder="请输入许可名称">
                 </div>
                 <div class="form-group">
-                    <label for="name">title</label>
-                    <input type="text" class="form-control" id="updateTitle" name="title" placeholder="请输入模块title">
+                    <label for="name">许可标题</label>
+                    <input type="text" class="form-control" id="updateTitle" name="title" placeholder="请输入许可标题">
                 </div>
                 <div class="form-group">
-                    <label for="name">模块图标</label>
-                    <input type="text" class="form-control" id="updateIcon" name="icon" placeholder="请输入模块图标">
+                    <label for="name">许可图标</label>
+                    <input type="text" class="form-control" id="updateIcon" name="icon" placeholder="请输入许可图标">
                 </div>
             </div>
             <div class="modal-footer">
