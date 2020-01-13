@@ -125,6 +125,25 @@
     </div>
 </div>
 
+<!-- addPermissionModal -->
+<div class="modal fade" id="assignPermissionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="#">给角色分配权限</h4>
+            </div>
+            <div class="modal-body">
+                <ul id="treeDemo" class="ztree"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="assignPermissionBtn" type="button" class="btn btn-primary">分配</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%-- 动态包含 --%>
 <jsp:include page="/WEB-INF/views/common/js.jsp"/>
 <script type="text/javascript">
@@ -196,7 +215,7 @@
             tr.append('<td><input class="deleteBatchClass" deleteBatchId="' + e.id + '" type="checkbox"></td>');
             tr.append('<td>' + e.name + '</td>');
             var td = $('<td></td>');
-            td.append('<button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>');
+            td.append('<button type="button" roleId="'+e.id+'" class="addPermissionClass btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>');
             td.append('<button type="button" roleId="' + e.id + '" class="updateClass btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>');
             td.append('<button type="button" deleteId="' + e.id + '" class="deleteClass btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>');
             tr.append(td);
@@ -400,7 +419,7 @@
         }, function (index) {
             layer.close(index);
         })
-    })
+    });
 
 
     //----------------------------批量删除------------------------------
@@ -452,6 +471,92 @@
         });
     });
 
+    // =============================为角色增加权限================================
+
+    // 为哪个角色分配权限
+    var id = -1;
+
+    // 为这个按钮增加点击事件
+    $("tbody").on('click', '.addPermissionClass', function () {
+        $("#assignPermissionModal").modal({
+            backdrop : false,
+            keyboard : false
+        });
+        id = $(this).attr('roleId');
+        initPromiseTree();
+    });
+
+    // 权限菜单树
+    function initPromiseTree() {
+        // 配置
+        var setting = {
+            check: {
+				enable: true
+			},
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pid"
+                },
+                key : {
+                    url : "#",
+                    name : 'title'
+                }
+            },
+            view : {
+                addDiyDom: function(treeId,treeNode) {
+                      $("#"+treeNode.tId+"_ico").removeClass();//.addClass();
+                      $("#"+treeNode.tId+"_span").before("<span class='"+treeNode.icon+"'></span>")
+                   }
+             }
+
+    };
+        // 异步请求加载树
+        $.get('${PATH}/permission/loadPermissionTree', {}, function(treeList) {
+                $.fn.zTree.init($("#treeDemo"), setting, treeList);
+                //展开所有节点
+                var ztreeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                ztreeObj.expandAll(true);
+
+        });
+    }
+
+    // 分配权限
+    $("#assignPermissionBtn").click(function () {
+        console.log('分配权限的角色 id = ', id);
+        // 拿到树对象
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        // 获取被选的树结点
+        var nodes = treeObj.getCheckedNodes(true);
+        if (nodes.length === 0){
+            layer.msg('请选择要分配的权限！');
+            return false;
+        }
+        var json = {
+          roleId : id
+        };
+        // 遍历取出id
+        $.each(nodes, function (i, permission) {
+            // 将id以数组形式存放到json中
+            json['ids[' + i + ']'] = permission.id;
+            // ids.push(permission.id);
+        });
+        console.log('json = ', json);
+        $.ajax({
+            type : 'post',
+            url : '${PATH}/role/assignPermission',
+            data : json,
+            success : function (msg) {
+                if (msg === nodes.length){
+                    layer.msg('分配成功！', {time : 1000});
+                    $("#assignPermissionModal").modal('hide');
+                }else {
+                    layer.msg('分配失败！', {time : 1000});
+                }
+            }
+        })
+    });
 
 </script>
 </body>

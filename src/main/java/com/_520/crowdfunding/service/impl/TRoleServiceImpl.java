@@ -3,6 +3,7 @@ package com._520.crowdfunding.service.impl;
 import com._520.crowdfunding.domain.*;
 import com._520.crowdfunding.mapper.TAdminRoleMapper;
 import com._520.crowdfunding.mapper.TRoleMapper;
+import com._520.crowdfunding.mapper.TRolePermissionMapper;
 import com._520.crowdfunding.service.TRoleService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class TRoleServiceImpl implements TRoleService {
 
     @Autowired
     private TAdminRoleMapper adminRoleMapper;
+
+    @Autowired
+    private TRolePermissionMapper rolePermissionMapper;
 
     @Override
     public PageInfo<TRole> listAllTRole(Map<String, Object> map) {
@@ -102,6 +106,23 @@ public class TRoleServiceImpl implements TRoleService {
             TAdminRoleExample example = new TAdminRoleExample();
             example.createCriteria().andAdminidEqualTo(adminId).andRoleidEqualTo(roleId);
             count += adminRoleMapper.deleteByExample(example);
+        }
+        return count;
+    }
+
+    @Override
+    public Integer protectRoleAndPermission(Integer roleId, List<Integer> permissionIds) {
+        int count = 0;
+        // 删除角色的权限
+
+        TRolePermissionExample example = new TRolePermissionExample();
+        example.createCriteria().andRoleidEqualTo(roleId).andPermissionidIn(permissionIds);
+        rolePermissionMapper.deleteByExample(example);
+
+        // 保存角色和对应的权限
+        for (Integer permissionId : permissionIds) {
+            TRolePermission rolePermission = new TRolePermission(roleId, permissionId);
+            count += rolePermissionMapper.insertSelective(rolePermission);
         }
         return count;
     }

@@ -60,4 +60,11 @@ public interface TRoleService {
      * @param roleIds       取消分配角色的id
      */
     Integer protectAdmainAndRoleByDelete(Integer adminId, List<Integer> roleIds);
+
+    /**
+     * \    为角色分配权限
+     * @param roleId                角色id
+     * @param permissionIds         所有权限id
+     */
+    Integer protectRoleAndPermission(Integer roleId, List<Integer> permissionIds);
 }

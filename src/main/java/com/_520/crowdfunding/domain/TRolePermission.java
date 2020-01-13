@@ -5,6 +5,11 @@ public class TRolePermission extends TRolePermissionKey {
 
     private Integer permissionid;
 
+    public TRolePermission(Integer roleId, Integer permissionId) {
+        this.roleid = roleId;
+        this.permissionid = permissionId;
+    }
+
     public Integer getRoleid() {
         return roleid;
     }

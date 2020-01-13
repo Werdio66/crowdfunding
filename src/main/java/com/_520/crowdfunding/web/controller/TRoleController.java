@@ -1,5 +1,7 @@
 package com._520.crowdfunding.web.controller;
 
+import com._520.crowdfunding.common.util.Datas;
+import com._520.crowdfunding.common.util.StringUtil;
 import com._520.crowdfunding.domain.TRole;
 import com._520.crowdfunding.service.TRoleService;
 import com.github.pagehelper.PageHelper;
@@ -30,6 +32,13 @@ public class TRoleController {
 
     private Logger logger = LoggerFactory.getLogger(TRoleController.class);
 
+    @ResponseBody
+    @RequestMapping("/assignPermission")
+    public Integer assignPermission(Integer roleId, Datas datas){
+        logger.debug("roleId = {}, permissionId = {}", roleId, datas.getIds());
+
+        return roleService.protectRoleAndPermission(roleId, datas.getIds());
+    }
 
     // 跳转到角色维护的主页面
     @RequestMapping("/index")
