@@ -32,6 +32,14 @@ public class TRoleController {
 
     private Logger logger = LoggerFactory.getLogger(TRoleController.class);
 
+
+
+    @ResponseBody
+    @RequestMapping("/getPermissionIdByRoleId")
+    public List<Integer> getPermissionIdByRoleId(Integer roleId){
+        return roleService.getPermissionIdByRoleId(roleId);
+    }
+
     @ResponseBody
     @RequestMapping("/assignPermission")
     public Integer assignPermission(Integer roleId, Datas datas){

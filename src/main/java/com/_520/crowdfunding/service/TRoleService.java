@@ -67,4 +67,10 @@ public interface TRoleService {
      * @param permissionIds         所有权限id
      */
     Integer protectRoleAndPermission(Integer roleId, List<Integer> permissionIds);
+
+
+    /**
+     *  查询指定角色id的所有权限id
+     */
+    List<Integer> getPermissionIdByRoleId(Integer roleId);
 }

@@ -116,7 +116,7 @@ public class TRoleServiceImpl implements TRoleService {
         // 删除角色的权限
 
         TRolePermissionExample example = new TRolePermissionExample();
-        example.createCriteria().andRoleidEqualTo(roleId).andPermissionidIn(permissionIds);
+        example.createCriteria().andRoleidEqualTo(roleId);
         rolePermissionMapper.deleteByExample(example);
 
         // 保存角色和对应的权限
@@ -125,5 +125,21 @@ public class TRoleServiceImpl implements TRoleService {
             count += rolePermissionMapper.insertSelective(rolePermission);
         }
         return count;
+    }
+
+    @Override
+    public List<Integer> getPermissionIdByRoleId(Integer roleId) {
+
+        TRolePermissionExample example = new TRolePermissionExample();
+        example.createCriteria().andRoleidEqualTo(roleId);
+
+        List<TRolePermission> tRolePermissions = rolePermissionMapper.selectByExample(example);
+
+        List<Integer> permissionIds = new ArrayList<>();
+        for (TRolePermission tRolePermission : tRolePermissions) {
+            permissionIds.add(tRolePermission.getPermissionid());
+        }
+        System.out.println(permissionIds);
+        return permissionIds;
     }
 }

@@ -519,7 +519,22 @@
                 var ztreeObj = $.fn.zTree.getZTreeObj("treeDemo");
                 ztreeObj.expandAll(true);
 
+                // 为了确保回显准确性，需要将回显请求放到树加载完成之后
+                // 因为俩个异步请求，将相当于俩个线程，不能保证先后顺序
+            // 回显以分配权限
+            $.get('${PATH}/role/getPermissionIdByRoleId?roleId=' + id, function (list) {
+                console.log('回显哪个角色的权限 id = ', id);
+                console.log('回显的 ids = ', list);
+                $.each(list, function (i, permissionId) {
+                    // 根据结点的属性值查找结点
+                    var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                    var node = treeObj.getNodeByParam("id", permissionId, null);
+                    // 勾选结点
+                    treeObj.checkNode(node, true, false);
+                })
+            })
         });
+
     }
 
     // 分配权限
