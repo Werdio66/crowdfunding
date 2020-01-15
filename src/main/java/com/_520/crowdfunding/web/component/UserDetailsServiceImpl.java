@@ -1,4 +1,4 @@
-package com._520.crowdfunding.service.impl;
+package com._520.crowdfunding.web.component;
 
 import com._520.crowdfunding.domain.TAdmin;
 import com._520.crowdfunding.domain.TAdminExample;
@@ -52,7 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return null;
         }
         TAdmin user = admins.get(0);
-        logger.info("用户 = {}", user.getLoginacct());
+        logger.debug("用户 = {}", user.getLoginacct());
         // 查询用户具有的角色
 
         List<TRole> roles = roleMapper.listRoleByAdminId(user.getId());
@@ -72,9 +72,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(permission.getName()));
         }
 
-        logger.info("角色 = {}", roles);
-        logger.info("权限 = {}", permissions);
-        logger.info("分配后的权限 = {}", authorities);
-        return new User(user.getLoginacct(), user.getUserpswd(), authorities);
+        logger.debug("角色 = {}", roles);
+        logger.debug("权限 = {}", permissions);
+        logger.debug("分配后的权限 = {}", authorities);
+
+        return new SecurityAdmin(user, authorities);
     }
 }

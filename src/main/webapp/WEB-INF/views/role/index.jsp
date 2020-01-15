@@ -146,6 +146,7 @@
 
 <%-- 动态包含 --%>
 <jsp:include page="/WEB-INF/views/common/js.jsp"/>
+
 <script type="text/javascript">
     // 加载页面
     $(function () {
@@ -177,8 +178,8 @@
         // 弹窗的标志
         var flag = -1;
         $.ajax({
-            type : "post",
-            url : "${PATH}/role/loadDate",
+            type : 'post',
+            url : '${PATH}/role/loadDate',
             // 传输的数据json格式
             data : json,
             // 发起请求之前做得事，表单校验等
@@ -186,6 +187,7 @@
                 // 显示图片
                 flag = layer.load(0, 10 * 1000);
                 console.log("显示图片");
+                console.log('json = ', json);
                 return true;
             },
             // 处理请求参数
@@ -374,14 +376,21 @@
                 return true;
             },
             success: function (result) {
+                var msg = result.toString();
+                console.log('返回结果 = ', result);
+                console.log('msg的类型 = ', msg.type);
+                console.log('返回结果的类型 = ', result.type);
+                console.log('result == 403 ? ', msg === '403');
                // 修改成功
-                if (result === 1) {
+                if (msg === '1') {
                     layer.msg("修改成功！", {time : 1000});
                     // 关闭模态框
                     $("#updateModal").modal('hide');
                     // 重新刷新页面
                     console.log("当前页 = ", curentPage);
                     initDate(curentPage);
+                }else if (msg === '403') {
+                    layer.msg('您无权访问该功能！');
                 }else {
                     layer.msg("修改失败", {time : 1000});
                 }

@@ -1,6 +1,6 @@
 package com._520.crowdfunding.web.config;
 
-import com._520.crowdfunding.service.impl.UserDetailsServiceImpl;
+import com._520.crowdfunding.web.component.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -46,9 +46,16 @@ public class AppWebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 没有访问权限跳转
         http.exceptionHandling().accessDeniedPage("/unauth.html");
         // 禁用csrf
-//        http.csrf().disable();
+        http.csrf().disable();
         // 默认注销
 //        http.logout();
         http.logout().logoutUrl("/logout").logoutSuccessUrl("/index");
+
+
+        // 异常处理
+        http.exceptionHandling().accessDeniedHandler((request, response, e) -> {
+            response.getWriter().print(Integer.valueOf(403));
+        });
+
     }
 }

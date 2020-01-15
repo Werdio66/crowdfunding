@@ -14,12 +14,6 @@
         https://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 
-    <context:annotation-config/>
-    <!-- IoC注解解析器 -->
-    <context:component-scan base-package="com._520.crowdfunding">
-        <!-- 不扫描controller类 -->
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
     <!--    TX注解解析器   -->
     <tx:annotation-driven transaction-manager="txManager"/>
     <!-- 整合mybatis和spring-->
