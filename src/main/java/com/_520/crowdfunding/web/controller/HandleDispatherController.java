@@ -39,13 +39,13 @@ public class HandleDispatherController {
     }
 
     // 跳转到登录页面
-    @RequestMapping("/login")
+    @RequestMapping("/toLogin")
     public String login() {
         logger.debug("跳转到登录页面");
         return "login";
     }
 
-    // 注销
+   /* // 注销
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
         logger.debug("注销登录");
@@ -53,16 +53,16 @@ public class HandleDispatherController {
             session.invalidate();
         }
         return "redirect:/index";
-    }
+    }*/
 
     // 跳转到菜单
     @RequestMapping("/main")
     public String main(HttpSession session) {
         // 查询所有的父菜单，将子菜单封装到父菜单中
         // 没有登录
-        if (session == null){
-            return "redirect:/login";
-        }
+//        if (session == null){
+//            return "redirect:/toLogin";
+//        }
 
         // 从session中取菜单列表
         List<TMenu> menuList = (List<TMenu>) session.getAttribute("menuList");
@@ -73,7 +73,7 @@ public class HandleDispatherController {
         }
         return "main";
     }
-    // 处理登录
+   /* // 处理登录
     @RequestMapping("/doLogin")
     public String doLogin(String username, String password, HttpSession session, Model model){
         logger.debug("login..");
@@ -94,5 +94,5 @@ public class HandleDispatherController {
             model.addAttribute(Const.ERROR_MSG, e.getMessage());
             return "login";
         }
-    }
+    }*/
 }

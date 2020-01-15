@@ -8,6 +8,27 @@
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="pid" jdbcType="INTEGER" property="pid" />
   </resultMap>
+
+
+
+
+  <select id="listPermissionByAdminId" resultMap="BaseResultMap">
+        SELECT DISTINCT t_permission.* FROM t_permission JOIN t_role_permission
+        ON t_permission.id = t_role_permission.permissionid
+        JOIN t_role
+        ON t_role.id = t_role_permission.roleid
+        JOIN t_admin_role
+        ON t_admin_role.roleid = t_role.id
+        JOIN t_admin
+        ON t_admin.id = t_admin_role.adminid
+        WHERE t_admin.id = #{id}
+  </select>
+
+
+
+
+
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
