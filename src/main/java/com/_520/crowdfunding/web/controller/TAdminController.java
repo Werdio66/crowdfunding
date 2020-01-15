@@ -10,6 +10,7 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,6 +123,7 @@ public class TAdminController {
     }
 
     // 修改用户信息
+    @PreAuthorize("hasRole('PM - 项目经理')")
     @RequestMapping("/doUpdate")
     public String doUpdate(TAdmin admin, Integer pageNum){
         logger.info("请求参数中的 admin = {}", admin);

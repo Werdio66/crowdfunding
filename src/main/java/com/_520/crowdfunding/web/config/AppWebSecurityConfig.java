@@ -54,7 +54,14 @@ public class AppWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 异常处理
         http.exceptionHandling().accessDeniedHandler((request, response, e) -> {
-            response.getWriter().print(Integer.valueOf(403));
+
+            // X-Requested-With: XMLHttpRequest 用于判断异步还是同步
+            String reqType = request.getHeader("X-Requested-With");
+            if ("XMLHttpRequest".equals(reqType)){  // 异步
+                response.getWriter().print(Integer.valueOf(403));
+            }else {     // 同步
+                request.getRequestDispatcher("/WEB-INF/views/error/error403.jsp").forward(request, response);
+            }
         });
 
     }
